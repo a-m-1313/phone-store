@@ -1,0 +1,41 @@
+
+{% extends "_base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Mobile List" %}{% endblock title %}
+
+{% block content %}
+<!-- Slider -->
+<header class="hero-section">
+    <h1>موبایل آلفا پلاس</h1>
+    <p>بهترین گوشی‌های هوشمند با بهترین قیمت‌ها</p>
+</header>
+
+<div class="container mt-5">
+    <h1 class="mb-4">{% trans "Mobile List" %}</h1>
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-4">
+            <div class="product-card">
+                <div class="product-image-container">
+                    <img src="{{ product.image_default.url }}" id="productImage{{ product.pk }}" class="product-image" alt="{{ product.model_name }}">
+                </div>
+                <h5>{{ product.brand }} {{ product.model_name|safe }}</h5>
+                <p><strong>{%trans "price"%}:</strong>  {{ product.price }} {% trans "$" %}</p>
+                <p><strong>{%trans "ram"%}:</strong> : {{ product.ram }}</p>
+                <p><strong>{% trans "battery_capacity" %}:</strong>  {{ product.battery_capacity }}</p>
+                <p><strong>{% trans "storage_capacity" %}:</strong> {{ product.storage_capacity }}</p>
+                <h6>{% trans "colors" %}:</h6>
+                <div>
+                    {% for color in product.colors.all %}
+                    <div class="color-option" style="background-color: {{ color.hex_code }};" onclick="changeProductImage('{{ product.pk }}', '{{ color.image.url }}')"></div>
+                    {% endfor %}
+                </div>
+                <a href="{% url 'product_detail' product.slug %}" class="btn btn-primary mt-3">{% trans "View Details" %}</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,508 @@
+{% extends "_base.html" %}
+{% load i18n %}
+
+{% block title %}{{ product.brand }} {{ product.model_name }}{% endblock title %}
+
+{% block content %}
+
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6">
+                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+
+                        <div class="carousel-item active">
+                            <img src="{{ product.image_default.url }}" class="d-block w-100  product-image"
+                                 alt="{{ product.model_name }}"
+                                 style=' width: 100%;
+                             height: 550px;'
+                            >
+
+                        </div>
+                        {% for gallery_image in product.images.all %}
+                            <div class="carousel-item">
+                                <img src="{{ gallery_image.image.url }}" class="d-block w-100 product-image"
+                                     alt="Gallery Image" style=' width: 100%;
+                        height: 550px;'
+                                >
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="product-detail-container">
+                    <h2>{{ product.brand }} {{ product.model_name|safe }}</h2>
+                    <p><strong>{% trans "price" %}:</strong> {{ product.price }} {% trans "$" %}</p>
+                    <p><strong>{% trans "ram" %}:</strong> : {{ product.ram }}</p>
+                    <p><strong>{% trans "battery_capacity" %}:</strong> {{ product.battery_capacity }}</p>
+                    <p><strong>{% trans "storage_capacity" %}:</strong> {{ product.storage_capacity }}</p>
+                    <p><strong>{% trans "camera_resolution" %}:</strong> {{ product.camera_resolution }}</p>
+                    <p><strong>{% trans "operating_system" %}:</strong> {{ product.operating_system }}</p>
+                    <h6>{% trans "colors" %}:</h6>
+                    <div>
+                        {% for color in product.colors.all %}
+                            <div class="color-option" style="background-color: {{ color.hex_code }};"
+                                 onclick="changeProductImage('{{ color.image.url }}')"></div>
+                        {% endfor %}
+                    </div>
+                    <a class="btn btn-primary mt-3" href="">{% trans "Add to Cart" %}</a>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-12">
+                <h3>{% trans "Specifications" %}</h3>
+                <div class="accordion" id="productSpecs">
+                    <div class="card">
+                        <div class="card-header" id="headingNetwork">
+                            <h5 class="mb-0">
+                                <button class="btn btn-lg btn-block" type="button" data-toggle="collapse"
+                                        data-target="#collapseNetwork" aria-expanded="false"
+                                        aria-controls="collapseNetwork">
+                                    {% trans "Network" %}
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseNetwork" class="collapse" aria-labelledby="headingNetwork"
+                             data-parent="#productSpecs">
+                            <div class="card-body">
+                                <table class="table table-bordered h5">
+                                    <tr>
+                                        <th scope="row"> {% trans "technology" %} </th>
+                                        <td>{{ product.network.technology }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">{% trans "2G BANDS" %}</th>
+                                        <td>{{ product.network.bands_2g }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">{% trans "3G BANDS" %}</th>
+                                        <td>{{ product.network.bands_3g }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>{% trans "  4G BANDS" %}</th>
+                                        <td>{{ product.network.bands_4g }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">{% trans " 5G BANDS " %}</th>
+                                        <td>{{ product.network.bands_5g }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{% trans "  speed" %}</td>
+                                        <td>{{ product.network.speed }}</td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingBody">
+                            <h5 class="mb-0">
+                                <button class="btn btn-lg btn-block" type="button" data-toggle="collapse"
+                                        data-target="#collapseBody" aria-expanded="false" aria-controls="collapseBody">
+                                    {% trans "body" %}
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseBody" class="collapse" aria-labelledby="headingBody"
+                             data-parent="#productSpecs">
+                            <div class="card-body">
+                                <table class="table table-bordered h5">
+                                    <tr>
+                                        <th scope="row">{% trans "dimensions" %}</th>
+                                        <td>{{ product.body.dimensions }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">{% trans "weight" %}</th>
+                                        <td>{{ product.body.weight }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">{% trans "build" %}</th>
+                                        <td>{{ product.body.build }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>{% trans "sim" %}</th>
+                                        <td>{{ product.body.sim }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">{% trans "other" %}</th>
+                                        <td>{{ product.body.other }}</td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="heading Functions">
+                            <h5 class="mb-0">
+                                <button class="btn btn-lg btn-block" type="button" data-toggle="collapse"
+                                        data-target="#collapseFunctions" aria-expanded="false"
+                                        aria-controls="collapseFunctions">
+                                    {% trans "functions" %}
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseFunctions" class="collapse" aria-labelledby="heading Functions"
+                             data-parent="#productSpecs">
+                            <div class="card-body">
+                                <table class="table table-bordered h5">
+                                    <tr>
+                                        <th scope="row">{% trans "os" %}</th>
+                                        <td>{{ product.os }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">{% trans "cpu" %}</th>
+                                        <td>{{ product.cpu }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>{% trans "gpu" %}</th>
+                                        <td>{{ product.gpu }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">{% trans "chipset" %}</th>
+                                        <td>{{ product.chipset }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{% trans "other" %}</td>
+                                        <td>{{ product.other }}</td>
+                                    </tr>
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingDisplay">
+                            <h5 class="mb-0">
+                                <button class="btn btn-lg btn-block" type="button" data-toggle="collapse"
+                                        data-target="#collapseDispaly" aria-expanded="false"
+                                        aria-controls="collapseDispaly">
+                                    {% trans "display" %}
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseDispaly" class="collapse" aria-labelledby="headingDisplay"
+                             data-parent="#productSpecs">
+                            <div class="card-body">
+                                <table class="table table-bordered h5">
+                                    <tr>
+                                        <th scope="row"><p>{% trans "type display" %}</p></th>
+                                        <td>{{ product.display.type_display }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">{% trans "resolution" %}</th>
+                                        <td>{{ product.display.resolution }} پیکسل</td>
+                                    </tr>
+                                    <tr>
+                                        <th>{% trans "screen_size" %}</th>
+                                        <td>{{ product.display.screen_size }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">{% trans "anti_shock" %}</th>
+                                        <td>{{ product.display.anti_shock }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{% trans "refresh_rate" %}</td>
+                                        <td>{{ product.display.refresh_rate }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{% trans "screen_always_on" %}</td>
+                                        <td>{{ product.display.screen_always_on }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{% trans "other" %}</td>
+                                        <td>{{ product.display.other }}</td>
+                                    </tr>
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingCamera">
+                            <h5 class="mb-0">
+                                <button class="btn btn-lg btn-block" type="button" data-toggle="collapse"
+                                        data-target="#collapseCamera" aria-expanded="true"
+                                        aria-controls="collapseCamera">
+                                    {% trans "CameraMine" %}
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseCamera" class="collapse" aria-labelledby="headingCamera"
+                             data-parent="#productSpecs">
+                            <div class="card-body">
+
+                                <table class="table table-bordered h5">
+                                    <tbody>
+                                    <tr>
+                                        <td scope="row">{% trans "camera" %}</td>
+                                        <td>{{ product.camera.camera }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">{% trans "features" %}</td>
+                                        <td>{{ product.camera.features }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">{% trans "video" %}</td>
+                                        <td>{{ product.camera.video }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">{% trans "other" %}</td>
+                                        <td>{{ product.camera.other }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingCameraselfie">
+                            <h5 class="mb-0">
+                                <button class="btn btn-lg btn-block" type="button" data-toggle="collapse"
+                                        data-target="#collapseCameraselfie" aria-expanded="true"
+                                        aria-controls="collapseCameraselfie">
+                                    {% trans "CameraSelfie" %}
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseCameraselfie" class="collapse" aria-labelledby="headingCamera"
+                             data-parent="#productSpecs">
+                            <div class="card-body">
+
+                                <table class="table table-bordered h5">
+                                    <tbody>
+                                    <tr>
+                                        <td scope="row">{% trans "camera" %}</td>
+                                        <td>{{ product.camera.camera }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">{% trans "features" %}</td>
+                                        <td>{{ product.camera.features }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">{% trans "video" %}</td>
+                                        <td>{{ product.camera.video }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">{% trans "other" %}</td>
+                                        <td>{{ product.camera.other }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header" id="headingBattery">
+                            <h5 class="mb-0">
+                                <button class="btn btn-lg btn-block" type="button" data-toggle="collapse"
+                                        data-target="#collapseBattery" aria-expanded="false"
+                                        aria-controls="collapseBattery">
+                                    {% trans "Battery" %}
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseBattery" class="collapse" aria-labelledby="headingBattery"
+                             data-parent="#productSpecs">
+                            <div class="card-body">
+                                <table class="table table-bordered h5">
+                                    <tr>
+                                        <td scope="row">{% trans "type_battery" %}</td>
+                                        <td>{{ product.battery.type_battery }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">{% trans "charging" %}</td>
+                                        <td>{{ product.battery.charging }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">{% trans "battry_replacement" %}</td>
+                                        <td>{{ product.battery.battry_replacement }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">{% trans "wierles_charge" %}</td>
+                                        <td>{{ product.battery.wierles_charge }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">{% trans "fats charge" %}</td>
+                                        <td>{{ product.battery.fats_charge }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">{% trans "time_charge" %}</td>
+                                        <td>{{ product.battery.time_charge }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">{% trans "otg_support" %}</td>
+                                        <td>{{ product.battery.otg_support }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">{% trans "max_wattage" %}</td>
+                                        <td>{{ product.battery.max_wattage }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">{% trans "other" %}</td>
+                                        <td>{{ product.battery.other }}</td>
+                                    </tr>
+
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="card">
+                        <div class="card-header" id="headingMemory">
+                            <h5 class="mb-0">
+                                <button class="btn btn-lg btn-block" type="button" data-toggle="collapse"
+                                        data-target="#collapseMemory" aria-expanded="false"
+                                        aria-controls="collapseMemory">
+                                    {% trans "Memory" %}
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseMemory" class="collapse" aria-labelledby="headingMemory"
+                             data-parent="#productSpecs">
+                            <div class="card-body">
+                                <table class="table table-bordered h5">
+                                    <tr>
+                                        <td scope="row"> {% trans "Internal" %} </td>
+                                        <td>{{ product.memory.internal }}</td>
+                                    </tr>
+                                    <tr>
+                                        {% if product.memory.external %}
+                                            <td scope="row">{% trans "External" %}</td>
+                                            <td>{{ product.memory.external }}</td>
+                                        {% endif %}
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">{% trans "other" %}</td>
+                                        <td>{{ product.memory.other }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingSound">
+                            <h5 class="mb-0">
+                                <button class="btn btn-lg btn-block" type="button" data-toggle="collapse"
+                                        data-target="#collapseSound" aria-expanded="false"
+                                        aria-controls="collapseSound">
+                                    {% trans "Sound" %}
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseSound" class="collapse" aria-labelledby="headingSound"
+                             data-parent="#productSpecs">
+                            <div class="card-body">
+                                <table class="table table-bordered h5">
+                                    <tr>
+                                        <td scope="row">{% trans "speaker_type" %}</td>
+                                        <td>{{ product.sound.speaker_type }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">{% trans "jack_35_milimetr" %}</td>
+                                        <td>{{ product.sound.jack_35_milimetr }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{% trans "radio" %}</td>
+                                        <td>{{ product.sound.radio }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">{% trans "other" %}</td>
+                                        <td>{{ product.sound.other }}</td>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card body">
+                        <div class="card-header" id="headingOtherFeauters">
+                            <h5 class="mb-0">
+                                <button class="btn btn-lg btn-block" type="button" data-toggle="collapse"
+                                        data-target="#collapseotherFeauters" aria-expanded="false"
+                                        aria-controls="collapseotherFeauters">
+                                    {% trans "OtherFeatures" %}
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseotherFeauters" class="collapse" aria-labelledby="headingOtherFeauters"
+                             data-parent="#productSpecs">
+                            <div class="card-body  h5">
+                                <table class="table table-bordered ">
+                                    <tr>
+                                        <th scope="row c">{% trans "nfc" %}</th>
+                                        <td>{{ product.otherfeatures.nfc }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">{% trans "simcard" %}</th>
+                                        <td>{{ product.otherfeatures.simcard }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>{% trans "bakup_5g" %}</th>
+                                        <td>{{ product.otherfeatures.bakup_5g }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">{% trans "multiple_user" %}</th>
+                                        <td>{{ product.otherfeatures.multiple_user }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{% trans "version_usb" %}</td>
+                                        <td>{{ product.otherfeatures.version_usb }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{% trans "gps" %}</td>
+                                        <td>{{ product.otherfeatures.gps }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{% trans "wifi" %}</td>
+                                        <td>{{ product.otherfeatures.wifi }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{% trans "sensor" %}</td>
+                                        <td>{{ product.otherfeatures.sensors }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{% trans "voice_command" %}</td>
+                                        <td>{{ product.otherfeatures.voice_command }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{% trans "hotspot" %}</td>
+                                        <td>{{ product.otherfeatures.hotspot }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{% trans "other" %}</td>
+                                        <td>{{ product.otherfeatures.other }}</td>
+                                    </tr>
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+{% endblock content %}
